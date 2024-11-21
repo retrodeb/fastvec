@@ -61,7 +61,7 @@ public:
 	}
 
 	void reserve(uint32_t qty) {
-		T* new_data = reinterpret_cast<T*>(new std::aligned_storage_t<sizeof(T), alignof(T)>[qty]);
+		T* new_data = reinterpret_cast<T*>(new typename std::aligned_storage<sizeof(T), alignof(T)>::type[qty]);
 		assert(qty >= size_);
 
 		if (data_) {
@@ -114,7 +114,7 @@ public:
 		capacity_ = 0;
 	}
 
-	auto size() const {
+	uint32_t size() const {
 		return size_;
 	}
 
@@ -134,7 +134,7 @@ public:
 		return data_+size_;
 	}
 
-	auto capacity() const {
+	uint32_t capacity() const {
 		return capacity_;
 	}
 
