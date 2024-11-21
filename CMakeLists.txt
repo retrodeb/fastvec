@@ -27,7 +27,7 @@ option(FASTVEC_BUILD_TESTS "Build the test programs" ${FASTVEC_IS_MASTER_PROJECT
 #target_compile_features(${CMAKE_PROJECT} INTERFACE cxx_std_17)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 11)
 
 include(GNUInstallDirs)
 
