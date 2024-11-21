@@ -26,14 +26,20 @@ public:
 
 	// Copy constructor
 	FastVec(FastVec const& o) {
-		resize(o.capacity());
+		reserve(o.capacity());
 		for (uint32_t i=0; i<o.size(); i++) {
 			new (data+i) T(o[i]);
 		}
+		size_ = o.size;
 	}
 
 	// Move constructor
 	FastVec(FastVec&& o) {
+		*this = o;
+	}
+
+	FastVec& operator=(FastVec&& o) {
+		erase();
 		data_ = o.data_;
 		size_ = o.size_;
 		capacity_ = o.capacity_;
@@ -41,11 +47,6 @@ public:
 		o.data_ = nullptr;
 		o.size_ = 0;
 		o.capacity_ = 0;
-	}
-
-	FastVec& operator=(FastVec&& o) {
-		erase();
-		*this = o;
 		return *this;
 	}
 
@@ -102,16 +103,14 @@ public:
 	template<typename... Ts>
 	T& emplace_back(Ts&&... args) {
 		if (size_ == capacity_) grow();
-		new (data_+size_++) T (std::forward<Ts>(args)...);
-		return *end();
+		return *(new (data_+size_++) T (std::forward<Ts>(args)...));
 	}
 
 	void erase() {
-		for (uint32_t i=0; i<size_; i++) {
-			(data_+i)->~T();
+		for (; size_>0; size_--) {
+			(end()-1)->~T();
 		}
-		delete [] data_;
-		size_ = 0;
+		if (data_) delete [] data_;
 		capacity_ = 0;
 	}
 
@@ -120,11 +119,11 @@ public:
 	}
 
 	T* begin() {
-		return data_[0];
+		return data_;
 	}
 
 	T const* cbegin() const {
-		return data_[0];
+		return data_;
 	}
 
 	T* end() {
