@@ -12,3 +12,4 @@ function(create_test name)
 endfunction()
 
 create_test(pushpop)
+create_test(emplaceback)

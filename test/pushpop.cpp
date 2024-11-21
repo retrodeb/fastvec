@@ -3,22 +3,17 @@
 #define QTY 1000
 
 int main() {
-	FastVec<int> fv;
+	FastVec<int> vec;
 
 	for (int i=0; i<QTY; i++) {
-		fv.push_back(i);
+		vec.push_back(i);
 	}
 
-	std::cout << fv << std::endl;
-	if (fv.capacity() != 1024) {
-		std::cerr << "invalid capacity" << std::endl;
-		return 1;
-	}
+	std::cout << vec << std::endl;
+	assert(vec.capacity() == 1024);
 
 	for (int i=0; i<QTY; i++) {
-		auto v = fv.pop_back();
-		std::cout << v << std::endl;
-		if (v != QTY -i-1) return 1;
+		assert(vec.pop_back() == QTY -i-1);
 	}
 
 	return 0;
